@@ -42,11 +42,15 @@ La fase regional de *Future Engineers* evalúa la solidez técnica básica de lo
   * **Velocidad de Giro:** Potencia reducida en las curvas para estabilizar el centro de gravedad del vehículo y evitar derrapes.
 
 ### 2. Gestión de Potencia y Sensores (Power and Sense Management)
-* **Unidad de Control:** Se seleccionó el microcontrolador **Arduino Mega 2560** por su confiabilidad, tolerancia eléctrica y su amplia cantidad de pines digitales e interrupciones, permitiendo procesar las señales de los sensores y actuadores en paralelo.
-* **Matriz de Sensores:** El robot utiliza **dos sensores ultrasónicos HC-SR04** fijados en la parte frontal con orientación diagonal-lateral sobre una base personalizada de madera. Esta disposición permite calcular la distancia relativa hacia los muros izquierdo y derecho simultáneamente, abstrayendo las paredes de la pista como referencias métricas de navegación.
-* **Arquitectura de Energía:** Se diseñaron líneas de alimentación divididas de forma estricta:
+* **Unidad de Control:** Se seleccionó el microcontrolador **Arduino Mega 2560** por su confiabilidad, tolerancia eléctrica y su amplia cantidad de pines digitales, permitiendo procesar las señales de los sensores y actuadores en paralelo.
+* **Matriz de Sensores:** El robot utiliza **dos sensores ultrasónicos HC-SR04** fijados en la parte frontal con orientación diagonal-lateral sobre una base personalizada de madera. Esta disposición permite calcular la distancia relativa hacia los muros izquierdo y derecho simultáneamente.
+* **Arquitectura de Energía y Distribución:** Se diseñaron líneas de alimentación divididas de forma estricta:
   * El motor DC trasero y el servo de dirección reciben energía directamente desde un pack de baterías independiente conectado a las borneras del puente H **L298N**.
-  * La electrónica lógica (Arduino Mega y Sensores) se alimenta de forma aislada, previniendo reinicios o "crashes" causados por caídas de tensión o ruidos electromagnéticos de los motores.
+  * La electrónica lógica (Arduino Mega y Sensores) se alimenta de forma aislada para prevenir reinicios accidentales por caídas de tensión.
+* **Optimización del Protoboard (Decisión de Diseño):** En el centro del robot implementamos únicamente los rieles laterales de positivo (`+`) y negativo (`-`) de una mini protoboard, descartando el uso del bloque central completo. Esta decisión responde a tres razones de ingeniería:
+  1. **Reducción de Espacio y Peso:** Al remover el bloque de conexiones central, maximizamos el espacio disponible en el chasis para organizar los cables y el Arduino Mega, eliminando peso muerto innecesario.
+  2. **Seguridad y Robustez en Conexiones:** Los puentes de señales en un protoboard completo tienden a aflojarse con las vibraciones de la carrera. Al conectar los cables de datos directamente de los sensores al Arduino Mega y usar la protoboard *únicamente como un bus centralizado de distribución de energía (5V y GND)*, reducimos drásticamente el riesgo de un falso contacto o desconexión en plena competencia.
+  3. **Simplicidad del Circuito:** Dado que el Arduino Mega cuenta con pines dedicados suficientes para cada señal, el uso de nodos intermedios de datos era innecesario; centralizar solo la alimentación limpia optimiza el diagnóstico rápido del hardware.
 
 ### 3. Gestión de Obstáculos y Estrategia (Obstacle Management)
 * **Lógica del Recorrido (Meta Regional):** La estrategia actual está diseñada para cumplir la primera gran prueba de la eliminatoria regional: **completar 3 vueltas perfectas a la pista y retornar al punto de origen de manera autónoma**.
