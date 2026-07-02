@@ -14,7 +14,7 @@
 * [📁 src (Código Fuente)](#)
 * [📁 t-photos (Fotos del Equipo)](#)
 * [📁 v-photos (Fotos del Robot)](#)
-* [📁 videos (Demostraciones de Rendimiento)](#)
+* [📁 videos (Demostraciones de Rendimiento)]
 </details>
 
 ---
