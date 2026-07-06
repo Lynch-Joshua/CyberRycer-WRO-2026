@@ -79,15 +79,3 @@ La fase regional de Future Engineers evalúa la solidez técnica básica de los 
 
 * **Lógica del Recorrido (Meta Regional):** La estrategia actual está diseñada para cumplir la primera gran prueba de la eliminatoria regional: completar 3 vueltas perfectas a la pista y retornar al punto de origen de manera autónoma.
 
-<details>
-<summary><b>📂 Haz clic aquí para expandir el menú de navegación</b></summary>
-<br>
-
-* 📁 [Models (Estructura y Chasis)](./Models)
-* 📁 [other (Lista de Materiales BOM)](./other)
-* 📁 [schemes (Diagramas Eléctricos)](./schemes)
-* 📁 [src (Código Fuente)](./src%20(%20source%20code%20))
-* 📁 [t-photos (Fotos del Equipo)](./t-photos)
-* 📁 [v-photos (Fotos del Robot)](./v-photos)
-* 📁 [videos (Demostraciones de Rendimiento)](./videos)
-</details>
