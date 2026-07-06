@@ -54,3 +54,26 @@ La fase regional de *Future Engineers* evalúa la solidez técnica básica de lo
 
 ### 3. Gestión de Obstáculos y Estrategia (Obstacle Management)
 * **Lógica del Recorrido (Meta Regional):** La estrategia actual está diseñada para cumplir la primera gran prueba de la eliminatoria regional: **completar 3 vueltas perfectas a la pista y retornar al punto de origen de manera autónoma**.
+### 4. Fotografías (Team and Vehicle Photos)
+
+* **Registro del Prototipo:** Las imágenes detalladas del chasis, la electrónica centralizada sobre el Arduino Mega 2560 y el montaje angular frontal de los sensores se encuentran alojadas en la carpeta `v-photos/`.
+* **Trabajo en Equipo:** Las capturas de las jornadas de ensamblaje, calibración de hardware y pruebas de pista se ubican en `t-photos/`.
+
+### 5. Videos de Rendimiento (Performance Videos)
+
+* **Demostración en Pista:** En la carpeta `videos/` se incluye el archivo multimedia que sirve como evidencia del coche autónomo completando de forma consecutiva las 3 vueltas reglamentarias en la simulación de pista regional, demostrando el correcto funcionamiento del cambio automático de velocidades por software.
+
+### 6. Utilización de GitHub
+
+* **Control de Versiones:** Este repositorio se utiliza activamente para registrar el progreso del proyecto. Cada confirmación (commit) representa una fase de optimización en los umbrales de lectura de los sensores y el ajuste fino de las potencias PWM del motor trasero para la competencia regional.
+
+### 7. Factor de Ingeniería (Engineering Factor)
+
+* **Eficiencia y Diseño Propio:** El proyecto destaca por resolver un problema complejo de navegación autónoma utilizando componentes comerciales accesibles. La optimización del espacio mediante el bus de energía simplificado (sin el bloque central del protoboard) y la fabricación artesanal del soporte frontal de madera demuestran adaptabilidad, reducción de peso muerto y un diseño orientado a la resistencia contra vibraciones en pista.
+
+---
+
+## 📄 Licencia
+
+Este proyecto es de código abierto y está licenciado bajo los términos de la **Licencia MIT**. Consulta el archivo `LICENSE` adjunto para más información.
+
