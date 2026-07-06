@@ -21,7 +21,7 @@
 
 ## 🌟 Puntos Clave del Proyecto (Highlights)
 * **Sistema de Movilidad Eficiente:** Construido sobre un chasis vehicular comercial de cuatro ruedas que garantiza balance y rigidez. Cuenta con un sistema de dirección delantera tipo Ackermann controlado por un servo motor y tracción trasera gestionada por el puente H L298N.
-* **Percepción Dinámica:** Equipado con dos sensores ultrasónicos HC-SR04 montados estratégicamente en la parte frontal orientados en diagonal hacia los laterales para medir distancias en tiempo real y ejecutar el centrado automático.
+* **Percepción Dinámica:** Equipado con dos sensores ultrasónicos HC-SR04 montados estratégicamente en la parte frontal uno orientados hacia el lateral izquierdo y otro orientados al frente para medir distancias en tiempo real y ejecutar el centrado automático.
 * **Control de Perfil de Velocidades:** Implementación de software basada en 3 niveles de velocidad por PWM (Arranque, Recta y Giro) para asegurar estabilidad y optimizar los tiempos en la pista de la regional.
 
 ---
