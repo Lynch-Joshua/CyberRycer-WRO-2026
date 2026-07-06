@@ -10,13 +10,10 @@
 <summary><b>📂 Haz clic aquí para expandir el menú de navegación</b></summary>
 <br>
 
-* 📁 [Models (Estructura y Chasis)](./Models)
-* 📁 [other (Lista de Materiales BOM)](./other)
-* 📁 [schemes (Diagramas Eléctricos)](./schemes)
-* 📁 [src (Código Fuente)](./src%20(%20source%20code%20))
-* 📁 [t-photos (Fotos del Equipo)](./t-photos)
-* 📁 [v-photos (Fotos del Robot)](./v-photos)
-* 📁 [videos (Demostraciones de Rendimiento)](./videos)
+* 📁 [Models (Estructura y Chasis)](#1-gestión-de-movilidad)
+* 📁 [other (Lista de Materiales BOM)](#2-gestión-de-potencia-y-sensores)
+* 📁 [schemes (Diagramas Eléctricos)](#2-gestión-de-potencia-y-sensores)
+* 📁 [src (Código Fuente)](#3-gestión-de-obstáculos-y-estrategia)
 </details>
 
 ---
@@ -37,7 +34,7 @@ La fase regional de Future Engineers evalúa la solidez técnica básica de los 
 
 ## 🏁 Documentación Técnica del Proyecto (Criterios de Evaluación)
 
-### 1. Gestión de Movilidad (Mobility Management)
+### 1. Gestión de Movilidad
 
 * **Selección del Chasis:** Optamos por un chasis comercial de tracción trasera y dirección delantera. Al no requerir diseño en 3D, nos enfocamos en el comportamiento dinámico y en la distribución de componentes para optimizar el centro de gravedad.
 * **Mecanismo de Dirección:** La dirección delantera utiliza la geometría Ackermann operada por un servo motor. Esto reduce el arrastre de los neumáticos en las curvas y ofrece un radio de giro preciso y repetible.
@@ -48,7 +45,7 @@ La fase regional de Future Engineers evalúa la solidez técnica básica de los 
 
 ---
 
-### 2. Gestión de Potencia y Sensores (Power and Sense Management)
+### 2. Gestión de Potencia y Sensores
 
 * **Unidad de Control:** Se seleccionó el microcontrolador Arduino Mega 2560 por su confiabilidad, tolerancia eléctrica y su amplia cantidad de pines digitales, permitiendo procesar las señales de los sensores y actuadores en paralelo.
 * **Matriz de Sensores:** El robot utiliza dos sensores ultrasónicos HC-SR04 fijados en la parte frontal con orientación diagonal-lateral sobre una base personalizada de madera. Esta disposición permite calcular la distancia relativa hacia los muros izquierdo y derecho simultáneamente.
@@ -62,20 +59,6 @@ La fase regional de Future Engineers evalúa la solidez técnica básica de los 
 
 ---
 
-### 3. Gestión de Obstáculos y Estrategia (Obstacle Management)
+### 3. Gestión de Obstáculos y Estrategia
 
 * **Lógica del Recorrido (Meta Regional):** La estrategia actual está diseñada para cumplir la primera gran prueba de la eliminatoria regional: completar 3 vueltas perfectas a la pista y retornar al punto de origen de manera autónoma.
- unificado y optimizado en cascada para simplificar el cableado:
-  * El pack de baterías principal alimenta directamente las borneras de potencia del Puente H L298N para dar la fuerza necesaria al motor DC trasero.
-  * Aprovechando el regulador interno de voltaje de 5V integrado en el módulo L298N, redirigimos esa salida regulada para alimentar directamente la electrónica lógica del Arduino Mega 2560.
-  * Desde el pin de 5V y GND del Arduino, la energía pasa a los rieles de una mini protoboard, distribuyéndose finalmente de forma limpia hacia los dos sensores ultrasónicos HC-SR04 y el servo motor de dirección. Esta configuración evita el uso de reguladores externos o baterías adicionales pesadas, manteniendo el carro ligero.
-* **Optimización del Protoboard:** En el centro del robot implementamos únicamente los rieles laterales de positivo (+) y negativo (-) de una mini protoboard, descartando el uso del bloque central completo. Esta decisión responde a dos razones de ingeniería:
-  * **Reducción de Espacio y Peso:** Al remover el bloque de conexiones central, maximizamos el espacio disponible en el chasis para organizar los cables y el Arduino Mega, eliminando peso muerto innecesario.
-  * **Seguridad y Robustez en Conexiones:** Los puentes de señales en un protoboard completo tienden a aflojarse con las vibraciones de la carrera. Al conectar los cables de datos directamente de los sensores al Arduino Mega y usar la protoboard únicamente como un bus centralizado de distribución de energía, reducimos drásticamente el riesgo de un falso contacto o desconexión en plena competencia.
-
----
-
-### 3. Gestión de Obstáculos y Estrategia (Obstacle Management)
-
-* **Lógica del Recorrido (Meta Regional):** La estrategia actual está diseñada para cumplir la primera gran prueba de la eliminatoria regional: completar 3 vueltas perfectas a la pista y retornar al punto de origen de manera autónoma.
-
