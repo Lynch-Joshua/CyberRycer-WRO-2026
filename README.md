@@ -20,34 +20,6 @@
 7. 📁 [V-photos (Fotos del Vehículo)](./v-photos)
 8. 📁 [Videos (Pruebas en Pista)](./videos)
 
-3. 📁 [other (BOM & Lista de Materiales)](./other)
-   * 📄 [other README](./other/README.md)
-   * 📁 [BOM (Bill Of Materials) folder](./other/BOM)
-     * 📄 [BOM README](./other/BOM/README.md)
-   * 📁 component Details folder
-     * 📄 [component Details README](./other/component_details_readme.md)
-     * 📁 Components (subfolders) — each folder is clickable:
-       * 📁 [0x00 - Arduino Mega 2560](./other/components/arduino_mega)
-       * 📁 [0x01 - Sensores Ultrasónicos HC-SR04](./other/components/hc_sr04)
-       * 📁 [0x02 - Driver Puente H L298N](./other/components/l298n)
-       * 📁 [0x03 - Motor DC Trasero](./other/components/motor_dc)
-       * 📁 [0x04 - Mini Protoboard (Bus de Energía)](./other/components/mini_protoboard)
-       * 📁 [0x05 - Servo Motor de Dirección 180°](./other/components/servo_motor)
-4. 📁 [schemes (Circuit files)](./schemes)
-   * 📄 [schemes README](./schemes/README.md)
-5. 📁 [src (Source code)](./src)
-   * 📄 [src README](./src/README.md)
-6. 📁 [t-photos (Team photos)](./t-photos)
-   * 📄 [t-photos README](./t-photos/README.md)
-7. 📁 [v-photos (Vehicle photos)](./v-photos)
-   * 📄 [v-photos README](./v-photos/README.md)
-8. 📁 [videos](./videos)
-   * 📄 [videos README](./videos/README.md)
-   * Subfolders:
-     * 📁 [Obstacle Challenge](./videos/obstacle_challenge)
-     * 📁 [Open Challenge](./videos/open_challenge)
-     * 📁 [Sensors Test](./videos/sensors_test)
-</details>
 
 ---
 
