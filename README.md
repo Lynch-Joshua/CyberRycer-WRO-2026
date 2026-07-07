@@ -10,45 +10,45 @@
 <summary><b>📂 Haz clic aquí para expandir el menú de navegación</b></summary>
 <br>
 
-1. **[Models (Estructura y Chasis)](#1-gestión-de-movilidad)**
-   * [Models README](./Models)
-   * Parts folder:
-     * `0x00` - Robot Base / Chasis Comercial
-     * `0x01` - Soporte Frontal de Madera (Sensores)
-     * `0x02` - Mecanismo de Dirección Ackermann
-     * `0x03` - Servo Motor de Dirección
-
-2. **[other (BOM & Lista de Materiales)](#2-gestión-de-potencia-y-sensores)**
-   * [other README](./other)
-   * Component Details:
-     * `0x00` - Arduino Mega 2560
-     * `0x01` - Sensores Ultrasónicos HC-SR04
-     * `0x02` - Driver Puente H L298N
-     * `0x03` - Motor DC de Corriente Directa
-     * `0x04` - Mini Protoboard (Bus de Energía)
-     * `0x05` - Pack de Baterías Principal
-
-3. **[schemes (Diagramas Eléctricos)](#2-gestión-de-potencia-y-sensores)**
-   * [schemes README](./schemes)
-   * Circuit Files (Conexiones y Flujo en Cascada)
-
-4. **[src (Código Fuente)](#3-gestión-de-obstáculos-y-estrategia)**
-   * [src README](./src%20(%20source%20code%20))
-   * Arduino Mega Control Code (PWM Control)
-
-5. **[t-photos (Fotos del Equipo)](#4-fotografías)**
-   * [t-photos README](./t-photos)
-   * Jornadas de Ensamblaje y Pruebas
-
-6. **[v-photos (Fotos del Robot)](#4-fotografías)**
-   * [v-photos README](./v-photos)
-   * Registro del Prototipo y Componentes
-
-7. **[videos (Demostraciones de Rendimiento)](#5-videos-de-rendimiento)**
-   * [videos README](./videos)
+1. 📄 [Top-level README](#-future-engineers---panamá-robotics-team-2026)
+2. 📁 [Models (Estructura y Chasis)](./Models)
+   * 📄 [Models README](./Models/README.md)
+   * 📁 Parts folder (Componentes Mecánicos y Chasis):
+     * 📄 [0x00 - Robot Base / Chasis Principal](./Models/chasis_base.md)
+     * 📄 [0x01 - Soporte Frontal de Madera (Matriz de Sensores)](./Models/soporte_madera.md)
+     * 📄 [0x02 - Wheel Support (Soportes de Ruedas)](./Models/wheel_support.md)
+     * 📄 [0x03 - Gear (Engranajes de Transmisión)](./Models/gears.md)
+     * 📄 [0x04 - Axle Clamp & Shafts (Ejes y Abrazaderas)](./Models/axle_shafts.md)
+     * 📄 [0x05 - Steering Rack (Barra de Dirección Ackermann)](./Models/steering_rack.md)
+     * 📄 [0x06 - Bearing Support (Soportes de Rodamientos)](./Models/bearing_supports.md)
+     * 📄 [0x07 - Battery Holder (Soporte del Pack de Baterías)](./Models/battery_holder.md)
+3. 📁 [other (BOM & Lista de Materiales)](./other)
+   * 📄 [other README](./other/README.md)
+   * 📁 [BOM (Bill Of Materials) folder](./other/BOM)
+     * 📄 [BOM README](./other/BOM/README.md)
+   * 📁 component Details folder
+     * 📄 [component Details README](./other/component_details_readme.md)
+     * 📁 Components (subfolders) — each folder is clickable:
+       * 📁 [0x00 - Arduino Mega 2560](./other/components/arduino_mega)
+       * 📁 [0x01 - Sensores Ultrasónicos HC-SR04](./other/components/hc_sr04)
+       * 📁 [0x02 - Driver Puente H L298N](./other/components/l298n)
+       * 📁 [0x03 - Motor DC Trasero](./other/components/motor_dc)
+       * 📁 [0x04 - Mini Protoboard (Bus de Energía)](./other/components/mini_protoboard)
+       * 📁 [0x05 - Servo Motor de Dirección 180°](./other/components/servo_motor)
+4. 📁 [schemes (Circuit files)](./schemes)
+   * 📄 [schemes README](./schemes/README.md)
+5. 📁 [src (Source code)](./src)
+   * 📄 [src README](./src/README.md)
+6. 📁 [t-photos (Team photos)](./t-photos)
+   * 📄 [t-photos README](./t-photos/README.md)
+7. 📁 [v-photos (Vehicle photos)](./v-photos)
+   * 📄 [v-photos README](./v-photos/README.md)
+8. 📁 [videos](./videos)
+   * 📄 [videos README](./videos/README.md)
    * Subfolders:
-     * Regional Challenge (3 Vueltas Perfectas)
-     * Sensors Test & PWM Calibration
+     * 📁 [Obstacle Challenge](./videos/obstacle_challenge)
+     * 📁 [Open Challenge](./videos/open_challenge)
+     * 📁 [Sensors Test](./videos/sensors_test)
 </details>
 
 ---
