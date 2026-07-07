@@ -10,8 +10,7 @@
 <summary><b>📂 Haz clic aquí para expandir el menú de navegación</b></summary>
 <br>
 
-  
-1. 📄 [Top-level README](./README.md)
+  1. 📄 [Top-level README](./README.md)
 2. 📁 [Models (Estructura y Chasis)](./Models)
 3. 📁 [Other (BOM & Lista de Materiales)](./other)
 4. 📁 [Schemes (Circuitos y Conexiones)](./schemes)
@@ -19,6 +18,7 @@
 6. 📁 [T-photos (Fotos del Equipo)](./t-photos)
 7. 📁 [V-photos (Fotos del Vehículo)](./v-photos)
 8. 📁 [Videos (Pruebas en Pista)](./videos)
+
 
 
 ---
