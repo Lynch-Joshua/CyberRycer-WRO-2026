@@ -10,12 +10,15 @@
 <summary><b>📂 Haz clic aquí para expandir el menú de navegación</b></summary>
 <br>
 
-1. 📄 [Top-level README](#-future-engineers---panamá-robotics-team-2026)
+  
+1. 📄 [Top-level README](./README.md)
 2. 📁 [Models (Estructura y Chasis)](./Models)
-   * 📄 [Models README](./Models/README.md)
-   * 📁 Parts folder (Componentes Mecánicos del Chasis):
-     * 📄 [0x00 - Ensamblaje Completo del Chasis Vehicular](./Models/chasis_completo.md)
-     * 📄 [0x01 - Soporte Frontal de Madera (Matriz de Sensores)](./Models/soporte_madera.md)
+3. 📁 [Other (BOM & Lista de Materiales)](./other)
+4. 📁 [Schemes (Circuitos y Conexiones)](./schemes)
+5. 📁 [Src (Código de Control)](./src)
+6. 📁 [T-photos (Fotos del Equipo)](./t-photos)
+7. 📁 [V-photos (Fotos del Vehículo)](./v-photos)
+8. 📁 [Videos (Pruebas en Pista)](./videos)
 
 3. 📁 [other (BOM & Lista de Materiales)](./other)
    * 📄 [other README](./other/README.md)
