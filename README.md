@@ -14,14 +14,8 @@
 2. 📁 [Models (Estructura y Chasis)](./Models)
    * 📄 [Models README](./Models/README.md)
    * 📁 Parts folder (Componentes Mecánicos del Chasis):
-     * 📄 [0x00 - Acrylic Chassis Plates / Base del Robot](./Models/chasis_base.md)
-     * 📄 [0x01 - Front Steering Cup / Copas de Giro](./Models/steering_cup.md)
-     * 📄 [0x02 - Linkage Rods / Bielas de Dirección Ackermann](./Models/linkage_rods.md)
-     * 📄 [0x03 - Servo L-Bracket & Rudder Angle / Soporte de Dirección](./Models/servo_bracket.md)
-     * 📄 [0x04 - Motor Mount & Couplings / Soporte de Tracción Trasera](./Models/motor_mount.md)
-     * 📄 [0x05 - Transmission Gears / Engranajes de Transmisión](./Models/transmission_gears.md)
-     * 📄 [0x06 - Battery Expansion Space / Compartimento de Energía](./Models/battery_space.md)
-     * 📄 [0x07 - Soporte Frontal de Madera (Matriz de Sensores)](./Models/soporte_madera.md)
+     * 📄 [0x00 - Ensamblaje Completo del Chasis Vehicular](./Models/chasis_completo.md)
+     * 📄 [0x01 - Soporte Frontal de Madera (Matriz de Sensores)](./Models/soporte_madera.md)
 
 3. 📁 [other (BOM & Lista de Materiales)](./other)
    * 📄 [other README](./other/README.md)
