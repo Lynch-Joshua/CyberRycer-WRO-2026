@@ -1,116 +1,204 @@
-#include <NewPing.h> // Librería para el control optimizado de los sensores de ultrasonido
-#include <Servo.h>   // Librería para controlar el servomotor de la dirección
+#include <Servo.h>
 
-Servo SERVO_DIRECCION;    // Crea el objeto para controlar el servo de dirección
-const int PIN_SERVO = 2;  // Pin digital asignado al servo
+// Pines de conexión
+#define SERVO_PIN         6
+#define LEFT_TRIG         11
+#define LEFT_ECHO         12
+#define RIGHT_TRIG        8
+#define RIGHT_ECHO        9
+#define MOTOR_ENA         10
+#define MOTOR_IN3         3
+#define MOTOR_IN4         4
 
-// Configuración de los ángulos del servo para la dirección del vehículo
-const int ANGULO_CENTRO = 90; // Ángulo para ir recto
-const int ANGULO_IZQ = 45;    // Ángulo máximo para girar a la izquierda
-const int ANGULO_DER = 140;   // Ángulo máximo para girar a la derecha
+// Configuración del carro
+#define ANGULO_RECTO          90    // Ruedas derechas
+#define GIRO_DERECHA          135
+#define GIRO_IZQUIERDA        45
 
-const int MAX_DISTANCIA = 200; // Distancia máxima que medirá el sensor (en cm)
+#define VELOCIDAD_CRUCERO     140   // Velocidad en rectas
+#define VELOCIDAD_GIRO        115   // Más lento en curvas para no derrapar
 
-// Asignación de pines para el sensor de ultrasonido Izquierdo
-const int PIN_TRIG_IZQ = 40;
-const int PIN_ECHO_IZQ = 41;
+#define UMBRAL_VACIO          55    // Distancia en cm para detectar la esquina
+#define DISTANCIA_MAX_MAPEO   250
 
-// Asignación de pines para el sensor de ultrasonido Derecho
-const int PIN_TRIG_DER = 39;
-const int PIN_ECHO_DER = 38;
+// Tiempos de las maniobras (en milisegundos)
+#define TIEMPO_GIRO_MS         850  // Duración de la vuelta
+#define TIEMPO_ENDEREZADO_MS   650  // Tiempo avanzando ciego para salir de la curva
+#define TIEMPO_INMUNIDAD_MS    2500 // Tiempo de gracia antes de leer otra esquina
 
-// Inicialización de los objetos NewPing para cada sensor
-NewPing SONAR_IZQ(PIN_TRIG_IZQ, PIN_ECHO_IZQ, MAX_DISTANCIA);
-NewPing SONAR_DER(PIN_TRIG_DER, PIN_ECHO_DER, MAX_DISTANCIA);
+// Estados del vehículo
+enum EstadoVehiculo {
+  AVANZAR_RECTO,       
+  GIRANDO,             
+  ENDEREZADO_FORZADO,  
+  META_ALCANZADA       
+};
 
-// Variables para almacenar las distancias medidas de cada lado
-int DISTANCIA_IZQ;
-int DISTANCIA_DER;
+// Para saber hacia dónde es el circuito
+enum SentidoPista { INDETERMINADO, HORARIO, ANTIHORARIO };
 
-// Pines de control del puente H (Driver L298N o similar) para el motor de tracción
-const int PIN_MOTOR_PWM = 5;  // Pin PWM para controlar la velocidad del motor
-const int PIN_MOTOR_IN3 = 11; // Pin de dirección 1 del motor
-const int PIN_MOTOR_IN4 = 10; // Pin de dirección 2 del motor
+EstadoVehiculo estadoActual = AVANZAR_RECTO;
+SentidoPista sentidoCarrera = INDETERMINADO; 
 
-// Valores de velocidad para el motor (rango de 0 a 255)
-int VELOCIDAD_ARRANQUE = 128; // Velocidad inicial o de empuje para salir de la inercia
-int VELOCIDAD_RECTA = 180;    // Velocidad de crucero al avanzar en línea recta
-int VELOCIDAD_GIRO = 110;     // Velocidad reducida en curvas para evitar derrapes/choques
+Servo servoDireccion;
 
-int curvas = 0;               // Contador de curvas realizadas
-bool estaba_girando = false;  // Bandera de control para no contar la misma curva varias veces
-
-/**
- * Función auxiliar para obtener la distancia de un sensor de forma segura.
- * Evita el problema del '0' (fuera de rango) devolviendo la distancia máxima.
- */
-int obtenerDistanciaSegura(NewPing &sonar) {
-  int cm = sonar.ping_cm(); // Realiza la medición en centímetros
-  if (cm == 0) return MAX_DISTANCIA; // Si da 0 (sin eco), asumimos que el camino está despejado
-  return cm; // Si detecta algo, devuelve la distancia real
-}
+unsigned long cronometroManiobra   = 0;
+unsigned long tiempoUltimoGiro     = 0;
+int girosContabilizados            = 0;
+const int TOTAL_GIROS_META         = 12; // 4 esquinas * 3 vueltas
 
 void setup() {
-  // Inicialización del servo y posicionamiento en el centro (recto)
-  SERVO_DIRECCION.attach(PIN_SERVO);
-  SERVO_DIRECCION.write(ANGULO_CENTRO);
+  Serial.begin(115200);
+  
+  // Sensores ultrasónicos
+  pinMode(LEFT_TRIG, OUTPUT);
+  pinMode(LEFT_ECHO, INPUT);
+  pinMode(RIGHT_TRIG, OUTPUT);
+  pinMode(RIGHT_ECHO, INPUT);
+  digitalWrite(LEFT_TRIG, LOW);
+  digitalWrite(RIGHT_TRIG, LOW);
 
-  // Configuración de los pines del motor como salidas
-  pinMode(PIN_MOTOR_PWM, OUTPUT);
-  pinMode(PIN_MOTOR_IN3, OUTPUT);
-  pinMode(PIN_MOTOR_IN4, OUTPUT);
+  // Motores
+  pinMode(MOTOR_ENA, OUTPUT);
+  pinMode(MOTOR_IN3, OUTPUT);
+  pinMode(MOTOR_IN4, OUTPUT);
 
-  // Configura el sentido de giro del motor para avanzar hacia adelante
-  digitalWrite(PIN_MOTOR_IN3, LOW);
-  digitalWrite(PIN_MOTOR_IN4, HIGH);
+  // Centrar dirección al arrancar
+  servoDireccion.attach(SERVO_PIN);
+  servoDireccion.write(ANGULO_RECTO); 
 
-  // Inicia el movimiento del coche con la velocidad de arranque
-  analogWrite(PIN_MOTOR_PWM, VELOCIDAD_ARRANQUE);
+  cronometroManiobra = millis();
+  tiempoUltimoGiro   = millis();
+  
+  // Tiempo para soltar el carro en la pista
+  delay(1500); 
 }
 
 void loop() {
-  // CONTROL DE CARRERA: Si ya completó 13 curvas, el coche se detiene por completo
-  if (curvas >= 13) {
-    digitalWrite(PIN_MOTOR_IN3, LOW);      // Apaga el sentido de giro del motor
-    digitalWrite(PIN_MOTOR_IN4, LOW);      
-    analogWrite(PIN_MOTOR_PWM, 0);         // Detiene la velocidad del motor
-    SERVO_DIRECCION.write(ANGULO_CENTRO);  // Endereza las llantas
-    while(1); // Bucle infinito para congelar el programa aquí (Fin de la pista)
+  if (estadoActual == META_ALCANZADA) {
+    detenerVehiculo();
+    return;
   }
 
-  // Lectura de los sensores con un pequeño delay intermedio para evitar interferencias
-  DISTANCIA_IZQ = obtenerDistanciaSegura(SONAR_IZQ);
-  delay(25); // Breve pausa para que el eco del sensor izquierdo no afecte al derecho
-  DISTANCIA_DER = obtenerDistanciaSegura(SONAR_DER);
+  // Leer distancias (con filtro para descartar errores)
+  float distIzq = obtenerDistanciaSana(LEFT_TRIG, LEFT_ECHO);
+  float distDer = obtenerDistanciaSana(RIGHT_TRIG, RIGHT_ECHO);
 
-  // LÓGICA DE NAVEGACIÓN
+  switch (estadoActual) {
 
-  // CASO 1: Si el sensor derecho detecta un vacío/apertura (distancia mayor a 50cm)
-  if (DISTANCIA_DER > 50) {
-    analogWrite(PIN_MOTOR_PWM, VELOCIDAD_GIRO); // Baja la velocidad para girar seguro
-    SERVO_DIRECCION.write(ANGULO_DER);          // Gira el volante a la derecha
-    
-    // Control para contar la curva solo una vez al entrar en ella
-    if (estaba_girando == false) {
-      curvas++;             // Incrementa el contador de curvas
-      estaba_girando = true; // Activa la bandera (ya está registrado que está girando)
-    }
-  } 
-  // CASO 2: Si el sensor izquierdo detecta un vacío/apertura (distancia mayor a 50cm)
-  else if (DISTANCIA_IZQ > 50) {
-    analogWrite(PIN_MOTOR_PWM, VELOCIDAD_GIRO); // Baja la velocidad para girar seguro
-    SERVO_DIRECCION.write(ANGULO_IZQ);          // Gira el volante a la izquierda
-    
-    // Control para contar la curva solo una vez al entrar en ella
-    if (estaba_girando == false) {
-      curvas++;             // Incrementa el contador de curvas
-      estaba_girando = true; // Activa la bandera
-    }
-  } 
-  // CASO 3: RECTA (Ambos sensores ven paredes cerca, es decir, distancias <= 50cm)
-  else {
-    analogWrite(PIN_MOTOR_PWM, VELOCIDAD_RECTA); // Sube a velocidad de crucero
-    SERVO_DIRECCION.write(ANGULO_CENTRO);         // Endereza el volante
-    estaba_girando = false; // Resetea la bandera para estar listo para la siguiente curva
+    case AVANZAR_RECTO:
+      ejecutarMotores(VELOCIDAD_CRUCERO);
+      servoDireccion.write(ANGULO_RECTO);
+
+      // Buscar esquinas solo si ya pasó el tiempo de inmunidad
+      if (millis() - tiempoUltimoGiro > TIEMPO_INMUNIDAD_MS) {
+        
+        // Si es la primera curva, descubrimos el sentido de la pista
+        if (sentidoCarrera == INDETERMINADO) {
+          if (distDer > UMBRAL_VACIO) {
+            sentidoCarrera = HORARIO;
+            Serial.println("Primera esquina a la derecha (horario).");
+            iniciarGiroForzado(GIRO_DERECHA);
+          } 
+          else if (distIzq > UMBRAL_VACIO) {
+            sentidoCarrera = ANTIHORARIO;
+            Serial.println("Primera esquina a la izquierda (antihorario).");
+            iniciarGiroForzado(GIRO_IZQUIERDA);
+          }
+        }
+        // Ya sabemos el sentido, solo hacemos caso al sensor correspondiente
+        else if (sentidoCarrera == HORARIO && distDer > UMBRAL_VACIO) {
+          Serial.println("Curva a la derecha...");
+          iniciarGiroForzado(GIRO_DERECHA);
+        }
+        else if (sentidoCarrera == ANTIHORARIO && distIzq > UMBRAL_VACIO) {
+          Serial.println("Curva a la izquierda...");
+          iniciarGiroForzado(GIRO_IZQUIERDA);
+        }
+      }
+      break;
+
+    case GIRANDO:
+      ejecutarMotores(VELOCIDAD_GIRO);
+      
+      // Checar si ya toca enderezar
+      if (millis() - cronometroManiobra >= TIEMPO_GIRO_MS) {
+        Serial.println("Enderezando...");
+        servoDireccion.write(ANGULO_RECTO); 
+        cronometroManiobra = millis();
+        estadoActual = ENDEREZADO_FORZADO;
+      }
+      break;
+
+    case ENDEREZADO_FORZADO:
+      ejecutarMotores(VELOCIDAD_CRUCERO);
+      servoDireccion.write(ANGULO_RECTO); // Mantener ruedas rectas
+
+      // Avanzar a ciegas un rato para alejarnos del borde interno de la curva
+      if (millis() - cronometroManiobra >= TIEMPO_ENDEREZADO_MS) {
+        girosContabilizados++;
+        Serial.print("Giros listos: "); 
+        Serial.println(girosContabilizados);
+        
+        tiempoUltimoGiro = millis(); 
+        
+        if (girosContabilizados >= TOTAL_GIROS_META) {
+          estadoActual = META_ALCANZADA;
+          Serial.println("¡Carrera terminada!");
+        } else {
+          estadoActual = AVANZAR_RECTO; // Volver a habilitar lectura de sensores
+        }
+      }
+      break;
   }
+}
+
+// Control de movimiento
+void iniciarGiroForzado(int anguloGiro) {
+  servoDireccion.write(anguloGiro);
+  cronometroManiobra = millis();
+  estadoActual = GIRANDO;
+}
+
+void ejecutarMotores(int pwmVelocidad) {
+  analogWrite(MOTOR_ENA, pwmVelocidad);
+  digitalWrite(MOTOR_IN3, HIGH);  
+  digitalWrite(MOTOR_IN4, LOW);
+}
+
+void detenerVehiculo() {
+  analogWrite(MOTOR_ENA, 0); 
+  digitalWrite(MOTOR_IN3, LOW);
+  digitalWrite(MOTOR_IN4, LOW);
+}
+
+// Función para evitar lecturas falsas del ultrasonido (toma 3 muestras y usa la de en medio)
+float obtenerDistanciaSana(int pinTrig, int pinEcho) {
+  long muestras[3];
+
+  for (int i = 0; i < 3; i++) {
+    digitalWrite(pinTrig, LOW);
+    delayMicroseconds(2);
+    digitalWrite(pinTrig, HIGH);
+    delayMicroseconds(10); 
+    digitalWrite(pinTrig, LOW);
+
+    long duracion = pulseIn(pinEcho, HIGH, 16000); 
+    long calculoCm = duracion / 58;       
+
+    if (calculoCm == 0) {
+      muestras[i] = DISTANCIA_MAX_MAPEO; // Libre
+    } else {
+      muestras[i] = calculoCm;
+    }
+    delayMicroseconds(600); 
+  }
+
+  // Ordenar de menor a mayor (burbuja simple)
+  if (muestras[0] > muestras[1]) { long t = muestras[0]; muestras[0] = muestras[1]; muestras[1] = t; }
+  if (muestras[1] > muestras[2]) { long t = muestras[1]; muestras[1] = muestras[2]; muestras[2] = t; }
+  if (muestras[0] > muestras[1]) { long t = muestras[0]; muestras[0] = muestras[1]; muestras[1] = t; }
+
+  // Devolver la mediana
+  return muestras[1];
 }
